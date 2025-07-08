@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="styles.css">
+  <title>Advanced Gallery</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+}
+
+.controls {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+}
+
+.controls button {
+      padding: 10px 15px;
+      border: none;
+      background: #4285F4;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+}
+
+.controls button:hover {
+      background: #3367D6;
+}
+
+.gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+}
+
+.gallery-item {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+      transform: scale(1.03);
+}
+
+.gallery-item img,
+.gallery-item video {
+      width: 100%;
+      height: auto;
+      display: block;
+      cursor: pointer;
+}
+
+.lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+}
+
+.lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+}
+
+.lightbox-content img,
+.lightbox-content video {
+      width: 100%;
+      height: auto;
+}
+
+.lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+}
+  </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html" target="_self" >
+                    <img src="web.1.jpg" alt="Chipukizi VOD Logo">
+                </a>
+            </div>
+            <nav class="nav-menu">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-list">
+                    <li class="hm"><a href="index.html">Home</a></li>
+                    <li class="abt"><a href="aboutus.html">About Us</a></li>
+                    <li class="srv"><a href="ourservices.html">Services</a></li>
+                    <li class="gly"><a href="gallery.html">Gallery</a></li>
+                    <li class="cnt"><a href="contactus.html" target="_self">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+  <div class="controls">
+    <button onclick="filterItems('all')">All</button>
+    <button onclick="filterItems('photo')">Photos</button>
+    <button onclick="filterItems('video')">Videos</button>
+    <button onclick="sortItems()">Sort A–Z</button>
+  </div>
+
+  <div class="gallery" id="gallery">
+    <div class="gallery-item photo" data-title="Beach">
+      <img src="https://via.placeholder.com/400x250.png?text=Beach" alt="Beach">
+    </div>
+    <div class="gallery-item video" data-title="Zebra">
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" controls></video>
+    </div>
+    <div class="gallery-item photo" data-title="Mountain">
+      <img src="https://via.placeholder.com/400x250.png?text=Mountain" alt="Mountain">
+    </div>
+    <div class="gallery-item video" data-title="Animals">
+      <video src="https://www.w3schools.com/html/movie.mp4" controls></video>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <div class="lightbox-content" id="lightbox-content"></div>
+  </div>
+
+  <script>
+    function filterItems(type) {
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach(item => {
+        item.style.display = (type === 'all' || item.classList.contains(type))? 'block': 'none';
+});
+}
+
+    function sortItems() {
+      const gallery = document.getElementById('gallery');
+      const items = Array.from(gallery.children);
+      items.sort((a, b) => {
+        const titleA = a.getAttribute('data-title').toLowerCase();
+        const titleB = b.getAttribute('data-title').toLowerCase();
+        return titleA.localeCompare(titleB);
+});
+      items.forEach(item => gallery.appendChild(item));
+}
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightbox-content');
+document.querySelectorAll('.gallery-item img,.gallery-item video').forEach(el => {
+      el.addEventListener('click', () => {
+        const clone = el.cloneNode(true);
+        clone.removeAttribute('controls'); // optional: remove controls for preview
+        lightboxContent.innerHTML = '';
+        lightboxContent.appendChild(clone);
+        lightbox.style.display = 'flex';
+});
+});
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+}
+  </script>
+
+</body>
+</html>
+
