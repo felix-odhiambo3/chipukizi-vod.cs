@@ -300,11 +300,6 @@ header {
     transform: translateY(-5px);
 }
 
-.member-image {
-    height: 250px;
-    overflow: hidden;
-}
-
 .member-image img {
     width: 350px;
     height: 350px;
